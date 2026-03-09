@@ -18,3 +18,7 @@ output "public_ip_id" {
 output "load_balancer_backend_address_pool_id" {
     value = azurerm_lb_backend_address_pool.lbap.id
 }
+
+output "public_ip_id_bastion" {
+    value = azurerm_public_ip.public_ip_bastion.id
+}

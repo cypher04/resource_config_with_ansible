@@ -1,9 +1,9 @@
 resource "azurerm_linux_virtual_machine_scale_set" "lvmss" {
-    name                = "${var.project_name}-${var.environment}-lvmss"
+    name                = "lvmss"
     location            = var.location
     resource_group_name = var.resource_group_name
-    sku                 = "Standard_DS1_v2"
-    instances           = 4
+    sku                 = "Standard_F2"
+    instances           = 2
     admin_username      = var.administrator_login
     admin_password      = var.administrator_password
     disable_password_authentication = false

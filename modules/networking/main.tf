@@ -9,7 +9,16 @@ resource "azurerm_subnet" "subnet" {
     name                 = "${var.project_name}-subnet-vmss-${var.environment}"
     resource_group_name  = var.resource_group
     virtual_network_name = azurerm_virtual_network.vnet.name
-    address_prefixes     = var.subnet_prefixes
+    address_prefixes     = [var.subnet_prefixes["vmss"]]
+}
+
+
+resource "azurerm_subnet" "bastion_subnet" {
+    name                 = "AzureBastionSubnet"
+    resource_group_name  = var.resource_group
+    virtual_network_name = azurerm_virtual_network.vnet.name
+    address_prefixes     = [var.subnet_prefixes["bastion"]]
+
 }
 
 
@@ -21,7 +30,7 @@ resource "azurerm_lb" "lb" {
 
     frontend_ip_configuration {
         name                 = "PublicIPAddress"
-        subnet_id            = var.subnet_ids[0]
+        # subnet_id            = var.subnet_ids[0]
         public_ip_address_id = azurerm_public_ip.public_ip.id
     }
 }
@@ -60,7 +69,33 @@ resource "azurerm_public_ip" "public_ip" {
     resource_group_name = var.resource_group
     allocation_method   = "Static"
     sku                 = "Standard"
+
 }
+
+resource "azurerm_public_ip" "public_ip_bastion" {
+    name                = "${var.project_name}-public-ip-${var.environment}-bastion"
+    location            = var.location
+    resource_group_name = var.resource_group
+    allocation_method   = "Static"
+    sku                 = "Standard"
+
+}
+
+resource "azurerm_bastion_host" "bastion" {
+    name                = "${var.project_name}-bastion-${var.environment}"
+    location            = var.location
+    resource_group_name = var.resource_group
+    sku = "Standard"
+    ip_configuration {
+        name                 = "bastion-ip-config"
+        subnet_id            = azurerm_subnet.bastion_subnet.id
+        public_ip_address_id = azurerm_public_ip.public_ip_bastion.id
+    }
+
+    scale_units = 4
+  
+}
+
 
 
 

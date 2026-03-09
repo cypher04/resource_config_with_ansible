@@ -25,7 +25,7 @@ variable "address_space" {
 
 variable "subnet_prefixes" {
     description = "subnet prefixes"
-    type        = list(string)
+    type        = map(string)
 }
 
 variable "subnet_ids" {
@@ -38,3 +38,4 @@ variable "load_balancer_backend_address_pool_id" {
     type        = string
   
 }
+

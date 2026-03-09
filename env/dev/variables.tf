@@ -25,7 +25,7 @@ variable "address_space" {
 }
 variable "subnet_prefixes" {
   description = "A map of subnet prefixes"
-  type        = list(string)
+  type        = map(string)
 }
 
 variable "tags" {
@@ -57,8 +57,8 @@ variable "ssh_public_key_path" {
 }
 
 
-variable "load_balancer_backend_address_pool_id" {
-  description = "The ID of the load balancer backend address pool"
-  type        = string
+# variable "load_balancer_backend_address_pool_id" {
+#   description = "The ID of the load balancer backend address pool"
+#   type        = string
   
-}
+# }

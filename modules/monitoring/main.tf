@@ -60,13 +60,13 @@ resource "azurerm_monitor_autoscale_setting" "asmonitoring" {
     }
   }
 
-  notification {
-    email {
-      send_to_subscription_administrator    = true
-      send_to_subscription_co_administrator = true
-      custom_emails                         = []
-    }
-  }
+  # notification {
+  #   email {
+  #     send_to_subscription_administrator    = true
+  #     send_to_subscription_co_administrator = true
+  #     custom_emails                         = []
+  #   }
+  # }
   
 }
 

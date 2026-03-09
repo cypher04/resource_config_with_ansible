@@ -15,3 +15,7 @@ output "tags" {
 output "virtual_machine_scale_set_id" {
   value = module.compute.virtual_machine_scale_set_id
 }
+
+output "subnet_adds" {
+  value = module.networking.subnet_ids
+}
