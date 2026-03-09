@@ -1,10 +1,10 @@
+#cloud-config
 package_update: true
 package_upgrade: true
 
 packages:
-  - ansible
   - git
 
 runcmd:
-  - git clone https://https://github.com/cypher04/Ansible.git /opt/ansible
-  - ansible-playbook /opt/ansible/playbooks/setup.yml
+  - apt-get install -y ansible
+  - git clone https://github.com/cypher04/Ansible.git /opt/ansible && ansible-playbook /opt/ansible/ansible_cloud_init_pro_1/site.yml

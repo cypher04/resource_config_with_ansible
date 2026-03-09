@@ -12,6 +12,31 @@ resource "azurerm_subnet" "subnet" {
     address_prefixes     = [var.subnet_prefixes["vmss"]]
 }
 
+resource "azurerm_public_ip" "nat_gw_ip" {
+    name                = "${var.project_name}-nat-gw-ip-${var.environment}"
+    location            = var.location
+    resource_group_name = var.resource_group
+    allocation_method   = "Static"
+    sku                 = "Standard"
+}
+
+resource "azurerm_nat_gateway" "nat_gw" {
+    name                = "${var.project_name}-nat-gw-${var.environment}"
+    location            = var.location
+    resource_group_name = var.resource_group
+    sku_name            = "Standard"
+}
+
+resource "azurerm_nat_gateway_public_ip_association" "nat_gw_ip_assoc" {
+    nat_gateway_id       = azurerm_nat_gateway.nat_gw.id
+    public_ip_address_id = azurerm_public_ip.nat_gw_ip.id
+}
+
+resource "azurerm_subnet_nat_gateway_association" "nat_gw_subnet_assoc" {
+    subnet_id      = azurerm_subnet.subnet.id
+    nat_gateway_id = azurerm_nat_gateway.nat_gw.id
+}
+
 
 resource "azurerm_subnet" "bastion_subnet" {
     name                 = "AzureBastionSubnet"
@@ -61,6 +86,7 @@ resource "azurerm_lb_rule" "lbr" {
     backend_port                   = 80
     frontend_ip_configuration_name = "PublicIPAddress"
     probe_id                       = azurerm_lb_probe.lbprobe.id
+    backend_address_pool_ids       = [azurerm_lb_backend_address_pool.lbap.id]
 }
 
 resource "azurerm_public_ip" "public_ip" {
